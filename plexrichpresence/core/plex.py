@@ -278,7 +278,6 @@ class PlexAlertListener(threading.Thread):
 				"small_text": state.capitalize(),
 				"small_image": state,
 			},
-			"type": 2
 		}
 		if stateText:
 			activity["state"] = truncate(stateText, 128)
