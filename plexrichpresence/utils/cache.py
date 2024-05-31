@@ -1,5 +1,5 @@
 from .logging import logger
-from config.constants import cacheFilePath
+from plexrichpresence.config.constants import cacheFilePath
 from typing import Any
 import json
 import os

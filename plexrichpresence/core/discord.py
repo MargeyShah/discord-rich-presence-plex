@@ -1,9 +1,9 @@
-from config.constants import discordClientID, isUnix, processID, ipcPipeBase
+from plexrichpresence.config.constants import discordClientID, isUnix, processID, ipcPipeBase
 from typing import Any, Optional
-from utils.logging import logger
+from plexrichpresence.utils.logging import logger
 import asyncio
 import json
-import models.discord
+import plexrichpresence.models.discord
 import os
 import struct
 import time
@@ -98,7 +98,7 @@ class DiscordIpcService:
 			logger.exception("An unexpected error occured while closing the asyncio event loop")
 		self.connected = False
 
-	def setActivity(self, activity: models.discord.Activity) -> None:
+	def setActivity(self, activity: plexrichpresence.models.discord.Activity) -> None:
 		if not self.connected:
 			logger.warning("Attempt to set activity while not connected to Discord IPC pipe")
 			return

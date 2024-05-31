@@ -1,4 +1,4 @@
-from config.constants import name
+from plexrichpresence.config.constants import name
 from typing import Any, Callable
 import logging
 

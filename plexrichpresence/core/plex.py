@@ -3,18 +3,18 @@
 from .config import config
 from .discord import DiscordIpcService
 from .imgur import uploadToImgur
-from config.constants import name, plexClientID
+from plexrichpresence.config.constants import name, plexClientID
 from plexapi.alert import AlertListener
 from plexapi.base import PlexSession, PlexPartialObject
 from plexapi.media import Genre, Guid
 from plexapi.myplex import MyPlexAccount, PlexServer
 from typing import Optional
-from utils.cache import getCacheKey, setCacheKey
-from utils.logging import LoggerWithPrefix
-from utils.text import formatSeconds, truncate
-import models.config
-import models.discord
-import models.plex
+from plexrichpresence.utils.cache import getCacheKey, setCacheKey
+from plexrichpresence.utils.logging import LoggerWithPrefix
+from plexrichpresence.utils.text import formatSeconds, truncate
+import plexrichpresence.models.config
+import plexrichpresence.models.discord
+import plexrichpresence.models.plex
 import requests
 import threading
 import time
@@ -51,7 +51,7 @@ class PlexAlertListener(threading.Thread):
 	connectionCheckTimerInterval = 60
 	maximumIgnores = 2
 
-	def __init__(self, token: str, serverConfig: models.config.Server):
+	def __init__(self, token: str, serverConfig: plexrichpresence.models.config.Server):
 		super().__init__()
 		self.daemon = True
 		self.token = token
@@ -140,14 +140,14 @@ class PlexAlertListener(threading.Thread):
 			self.connectionCheckTimer = threading.Timer(self.connectionCheckTimerInterval, self.connectionCheck)
 			self.connectionCheckTimer.start()
 
-	def tryHandleAlert(self, alert: models.plex.Alert) -> None:
+	def tryHandleAlert(self, alert: plexrichpresence.models.plex.Alert) -> None:
 		try:
 			self.handleAlert(alert)
 		except:
 			self.logger.exception("An unexpected error occured in the Plex alert handler")
 			self.disconnectRpc()
 
-	def handleAlert(self, alert: models.plex.Alert) -> None:
+	def handleAlert(self, alert: plexrichpresence.models.plex.Alert) -> None:
 		if alert["type"] != "playing" or "PlaySessionStateNotification" not in alert:
 			return
 		stateNotification = alert["PlaySessionStateNotification"][0]
@@ -270,7 +270,7 @@ class PlexAlertListener(threading.Thread):
 				self.logger.debug("Uploading poster to Imgur")
 				thumbUrl = uploadToImgur(self.server.url(thumb, True), config["display"]["posters"]["maxSize"])
 				setCacheKey(thumb, thumbUrl)
-		activity: models.discord.Activity = {
+		activity: plexrichpresence.models.discord.Activity = {
 			"details": truncate(title, 128),
 			"assets": {
 				"large_text": largeText,
@@ -278,6 +278,7 @@ class PlexAlertListener(threading.Thread):
 				"small_text": state.capitalize(),
 				"small_image": state,
 			},
+			"type": 2
 		}
 		if stateText:
 			activity["state"] = truncate(stateText, 128)

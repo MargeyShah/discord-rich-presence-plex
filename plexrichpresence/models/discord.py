@@ -1,4 +1,13 @@
 from typing import TypedDict
+from enum import Enum
+
+class ActivityType(Enum):
+	PLAYING: int = 0
+	STREAMING: int = 1
+	LISTENING: int = 2
+	WATCHING: int = 3
+	CUSTOM: int = 4
+	COMPETING: int = 5
 
 class ActivityAssets(TypedDict):
 	large_text: str
@@ -20,3 +29,5 @@ class Activity(TypedDict, total = False):
 	assets: ActivityAssets
 	timestamps: ActivityTimestamps
 	buttons: list[ActivityButton]
+	type: int
+

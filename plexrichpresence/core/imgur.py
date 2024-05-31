@@ -1,9 +1,9 @@
 from .config import config
 from PIL import Image
 from typing import Optional
-from utils.logging import logger
+from plexrichpresence.utils.logging import logger
 import io
-import models.imgur
+import plexrichpresence.models.imgur
 import requests
 
 def uploadToImgur(url: str, maxSize: int = 0) -> Optional[str]:

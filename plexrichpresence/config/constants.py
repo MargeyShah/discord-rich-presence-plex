@@ -1,8 +1,9 @@
 import os
 import sys
+import importlib.metadata
 
 name = "Discord Rich Presence for Plex"
-version = "2.7.0"
+version = "2.8.0"
 
 plexClientID = "discord-rich-presence-plex"
 discordClientID = "413407336082833418"

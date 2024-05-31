@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "plexrichpresence"
+version = "2.8.0"
+description = "Displays your Plex status on Discord using Rich Presence"
+authors = ["Margey Shah <margeyshah@proton.me>"]
+license = "MIT License"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">= 3.10"
+plexapi = "4.15.9"
+requests = "2.31.0"
+websocket-client = "1.7.0"
+pyyaml = "6.0.1"
+pillow = "10.2.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

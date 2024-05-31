@@ -1,13 +1,13 @@
-from config.constants import configFilePathBase
-from utils.dict import copyDict
-from utils.logging import logger
+from plexrichpresence.config.constants import configFilePathBase
+from plexrichpresence.utils.dict import copyDict
+from plexrichpresence.utils.logging import logger
 import json
-import models.config
+import plexrichpresence.models.config
 import os
 import time
 import yaml
 
-config: models.config.Config = {
+config: plexrichpresence.models.config.Config = {
 	"logging": {
 		"debug": True,
 		"writeToFile": False,

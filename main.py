@@ -1,5 +1,5 @@
-from config.constants import isInContainer, runtimeDirectory, uid, gid, containerCwd, noRuntimeDirChown
-from utils.logging import logger
+from plexrichpresence.config.constants import isInContainer, runtimeDirectory, uid, gid, containerCwd, noRuntimeDirChown
+from plexrichpresence.utils.logging import logger
 import os
 
 if isInContainer:
@@ -23,37 +23,19 @@ if isInContainer:
 	else:
 		logger.warning(f"Not running as the superuser. Manually ensure appropriate ownership of mounted contents")
 
-from config.constants import noPipInstall
-import sys
 
-if not noPipInstall:
-	try:
-		import subprocess
-		def parsePipPackages(packagesStr: str) -> dict[str, str]:
-			return { packageSplit[0].lower(): packageSplit[1] if len(packageSplit) > 1 else "" for packageSplit in [package.split("==") for package in packagesStr.splitlines()] }
-		pipFreezeResult = subprocess.run([sys.executable, "-m", "pip", "freeze"], stdout = subprocess.PIPE, text = True, check = True)
-		installedPackages = parsePipPackages(pipFreezeResult.stdout)
-		with open("requirements.txt", "r", encoding = "UTF-8") as requirementsFile:
-			requiredPackages = parsePipPackages(requirementsFile.read())
-		for packageName, requiredPackageVersion in requiredPackages.items():
-			installedPackageVersion = installedPackages.get(packageName, "none")
-			if installedPackageVersion != requiredPackageVersion:
-				logger.info(f"Installing dependency: {packageName} (required: {requiredPackageVersion}, installed: {installedPackageVersion})")
-				subprocess.run([sys.executable, "-m", "pip", "install", "-U", f"{packageName}=={requiredPackageVersion}"], check = True)
-	except Exception as e:
-		logger.exception("An unexpected error occured during automatic installation of dependencies. Install them manually by running the following command: python -m pip install -U -r requirements.txt")
-
-from config.constants import dataDirectoryPath, logFilePath, name, version, isInteractive
-from core.config import config, loadConfig, saveConfig
-from core.discord import DiscordIpcService
-from core.plex import PlexAlertListener, initiateAuth, getAuthToken
+from plexrichpresence.config.constants import dataDirectoryPath, logFilePath, name, version, isInteractive
+from plexrichpresence.core.config import config, loadConfig, saveConfig
+from plexrichpresence.core.discord import DiscordIpcService
+from plexrichpresence.core.plex import PlexAlertListener, initiateAuth, getAuthToken
 from typing import Optional
-from utils.cache import loadCache
-from utils.logging import formatter
-from utils.text import formatSeconds
+from plexrichpresence.utils.cache import loadCache
+from plexrichpresence.utils.logging import formatter
+from plexrichpresence.utils.text import formatSeconds
 import logging
-import models.config
+import plexrichpresence.models.config
 import time
+import sys
 
 def init() -> None:
 	if not os.path.isdir(dataDirectoryPath):
@@ -94,7 +76,7 @@ def main() -> None:
 		for plexAlertListener in plexAlertListeners:
 			plexAlertListener.disconnect()
 
-def authNewUser() -> Optional[models.config.User]:
+def authNewUser() -> Optional[plexrichpresence.models.config.User]:
 	id, code, url = initiateAuth()
 	logger.info("Open the below URL in your web browser and sign in:")
 	logger.info(url)
