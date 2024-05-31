@@ -289,7 +289,7 @@ class PlexAlertListener(threading.Thread):
 			elif mediaType == "episode":
 				guidsRaw = self.server.fetchItem(item.grandparentRatingKey).guids
 			guids: dict[str, str] = { guidSplit[0]: guidSplit[1] for guidSplit in [guid.id.split("://") for guid in guidsRaw] if len(guidSplit) > 1 }
-			buttons: list[models.discord.ActivityButton] = []
+			buttons: list[plexrichpresence.models.discord.ActivityButton] = []
 			for button in config["display"]["buttons"]:
 				if "mediaTypes" in button and mediaType not in button["mediaTypes"]:
 					continue
