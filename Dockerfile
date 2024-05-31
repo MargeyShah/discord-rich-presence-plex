@@ -5,6 +5,8 @@ RUN OSARCH="$TARGETOS-$TARGETARCH"; if [[ "$OSARCH" = "linux-386" || "$OSARCH" =
 WORKDIR /app
 COPY pyproject.toml poetry.lock ./
 RUN pip install --upgrade pip
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+ENV PATH="/root/.cargo/bin:${PATH}"
 RUN pip install poetry 
 RUN poetry install
 COPY . .
